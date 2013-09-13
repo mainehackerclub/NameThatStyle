@@ -26,10 +26,10 @@ void CLight::update() {
         this->isFading = 0;
         if (this->onFinishFade != NULL) this->onFinishFade();
       } else if (this->currentPWM > this->goalPWM) {
-        this->currentPWM--;
+        this->currentPWM -= 5;
         analogWrite(this->pin, this->currentPWM);
       } else {
-        this->currentPWM++;
+        this->currentPWM += 5;
         analogWrite(this->pin, this->currentPWM);
       }
     }
