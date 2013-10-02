@@ -15,8 +15,6 @@
 #include "CTimer.h"
 #include "CProgressBar.h"
  
-#define SONG_NAME (song[DEV_ID].name)
-#define SONG_DURATION (song[DEV_ID].length)
 
 
 /*
@@ -84,9 +82,12 @@
 #define D2_PIN 13
 #define D3_PIN 10
 
-#define PROGRESSBAR_CHAR_EMPTY 20
+#define PROGRESSBAR_CHAR_EMPTY 0
 #define PROGRESSBAR_CHAR_FULL 1
 #define PROGRESSBAR_CHAR_HALF 2
+
+#define SONG_NAME (song[DEV_ID].name)
+#define SONG_DURATION (song[DEV_ID].length)
 
 LiquidCrystal lcd(RS_PIN, E_PIN, D0_PIN, D1_PIN, D2_PIN, D3_PIN);
 CButton button(BUTTONPIN);
@@ -99,7 +100,7 @@ CProgressBar progressBar; //display progress bar of the song
 
 
 struct song_info_struct {
-  int length; //song length in mili seconds
+  long length; //song length in miliseconds
   String name; //song name to be displayed
 } song[16] = {
    {10, "tits" }, //0
@@ -233,16 +234,28 @@ void setup() {
   
   lcd.begin(16, 2);
   
+  byte emptyBar[8] = {
+    0b00000,
+    0b00000,
+    0b00000,
+    0b11011,
+    0b11011,
+    0b00000,
+    0b00000,
+    0b00000
+  };
+  
   byte halfBar[8] = {
     0b11000,
     0b11000,
     0b11000,
-    0b11000,
-    0b11000,
+    0b11011,
+    0b11011,
     0b11000,
     0b11000,
     0b11000
   };
+  
   byte fullBar[8] = {
     0b11011,
     0b11011,
@@ -253,6 +266,8 @@ void setup() {
     0b11011,
     0b11011
   };
+  
+  lcd.createChar(PROGRESSBAR_CHAR_EMPTY, emptyBar);
   lcd.createChar(PROGRESSBAR_CHAR_HALF, halfBar);
   lcd.createChar(PROGRESSBAR_CHAR_FULL, fullBar);
   progressBar.begin(&lcd, 1, 0, 15, PROGRESSBAR_CHAR_EMPTY, PROGRESSBAR_CHAR_FULL, PROGRESSBAR_CHAR_HALF);
