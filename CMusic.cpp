@@ -40,14 +40,14 @@ void CMusic::play(long aduration) {
   this->timePlayStart = millis();
   digitalWrite(this->pinPower, HIGH); //power on mp3 player
   digitalWrite(this->pinStandBy, HIGH); //power on amplifier
-  delay(1000); //wait for amp to start to avoid poping noise
+  delay(500); //wait for amp to start to avoid poping noise
   digitalWrite(this->pinMute, HIGH); //unmute
 }
 
 void CMusic::stop() {
   this->state = CMUSIC_STATE_STOP;
   digitalWrite(this->pinMute, LOW); //mute
-  delay(1000); //wait for amp to start to avoid poping noise
+  delay(500); //wait for amp  to avoid poping noise
   digitalWrite(this->pinStandBy, LOW); //power off amp
   digitalWrite(this->pinPower, LOW); //power off mp3 player
 }

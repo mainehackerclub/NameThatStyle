@@ -37,6 +37,8 @@
 #define SONG_NAME (song[DEV_ID].name)
 #define SONG_DURATION (song[DEV_ID].length)
 
+#define STATE_IDLE 0
+
 LiquidCrystal lcd(RS_PIN, E_PIN, D0_PIN, D1_PIN, D2_PIN, D3_PIN);
 CButton button(BUTTONPIN);
 CButton pad(PADPIN);
@@ -70,7 +72,7 @@ struct song_info_struct {
 };
 
 byte DEV_ID = 0;
-
+byte state = STATE_IDLE;
 
 
 /***************** EVENT HANDLERS *********************/
