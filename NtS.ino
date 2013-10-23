@@ -88,8 +88,10 @@ void onPadPushTimer() {
   if (!music.isPlaying()) {
     bl.fadeOn();
     lcd.clear();
-    lcd.print("playing...");
+    lcd.print("Starting...");
     music.play(SONG_DURATION); 
+    lcd.clear();
+    lcd.print("Playing");
   }
 }
 
@@ -103,8 +105,7 @@ void onPadReleaseTimer() {
   if (music.isPlaying()) {
     music.stop();
     bl.fadeOff();
-    lcd.clear();
-    lcd.print("step on the pad");
+    displayIdleScreen();
   }
 }
 
@@ -117,9 +118,11 @@ void onButtonPress() {
 
 void onSongFinish() {
   lcd.clear();
-  lcd.print("finished playing");
+  lcd.print("Finished playing");
   lcd.print(SONG_NAME);
-  
+  bl.fadeOff();
+  delay(1000);
+  displayIdleScreen();
 }
 
 /********************** HELPERS *********************/
@@ -133,7 +136,12 @@ byte getDeviceID() {
   return id;  
 }
 
-
+void displayIdleScreen() {
+    lcd.clear();
+    lcd.print("Name That Style");
+    lcd.setCursor(0,1);
+    lcd.print("Step on the pad");
+}
 
 /************************ SETUP ***********************/
 
@@ -147,95 +155,11 @@ void setup() {
   
   lcd.begin(16, 2);
   
-/*
-  byte emptyBar[8] = {
-    0b00000,
-    0b00000,
-    0b00000,
-    0b11011,
-    0b11011,
-    0b00000,
-    0b00000,
-    0b00000
-  };
-  
-  byte halfBar[8] = {
-    0b11000,
-    0b11000,
-    0b11000,
-    0b11011,
-    0b11011,
-    0b11000,
-    0b11000,
-    0b11000
-  };
-  
-  byte fullBar[8] = {
-    0b11011,
-    0b11011,
-    0b11011,
-    0b11011,
-    0b11011,
-    0b11011,
-    0b11011,
-    0b11011
-  };
-  
-  */
-  byte emptyBar[8] = {
-    0b11111,
-    0b00000,
-    0b00000,
-    0b00000,
-    0b00000,
-    0b00000,
-    0b00000,
-    0b11111
-  };
-  
-  byte halfBar[8] = {
-    0b11111,
-    0b00000,
-    0b11000,
-    0b11000,
-    0b11000,
-    0b11000,
-    0b00000,
-    0b11111
-  };
-  
-  byte fullBar[8] = {
-    0b11111,
-    0b00000,
-    0b11011,
-    0b11011,
-    0b11011,
-    0b11011,
-    0b00000,
-    0b11111
-  };
-
-  byte leftBar[8] = {
-    0b11111,
-    0b10000,
-    0b10011,
-    0b10011,
-    0b10011,
-    0b10011,
-    0b10000,
-    0b11111
-  };
-  
-  byte rightBar[8] = {
-    0b11111,
-    0b00001,
-    0b00001,
-    0b00001,
-    0b00001,
-    0b00001,
-    0b00001,
-    0b11111
-  };
+  extern byte emptyBar[];
+  extern byte halfBar[];
+  extern byte fullBar[];
+  extern byte leftBar[];
+  extern byte rightBar[];
   
   lcd.createChar(PROGRESSBAR_CHAR_EMPTY, emptyBar);
   lcd.createChar(PROGRESSBAR_CHAR_HALF, halfBar);
@@ -260,6 +184,7 @@ void setup() {
   delay(2000);
   bl.fadeOff();
   //lcd.clear();
+  displayIdleScreen();
 }
 
 /*********************** LOOP ************************/
@@ -271,9 +196,19 @@ void loop() {
   bl.update();
   ptimer.update();
   dtimer.update();
-  if (music.isPlaying()) progressBar.update(music.getTimePlaying());
-  lcd.setCursor(0,1);
-  lcd.print("0:14 ");
+  if (music.isPlaying()) {
+    long tpms = music.getTimePlaying();
+    byte tpm = tpms / 60000;
+    byte tps = (tpms % 60000) / 1000;
+    lcd.setCursor(0,1);
+    lcd.print(tpm);
+    lcd.print(":");
+    if (tps < 10) lcd.print("0");
+    lcd.print(tps);
+    lcd.print(" ");
+    progressBar.update(tpms);
+  }
+  
   //lcd.print("     ");
 
 }

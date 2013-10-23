@@ -37,8 +37,8 @@ void CProgressBar::setRange(long aminVal, long amaxVal) {
 void CProgressBar::update(long pos) {
   byte col = map(pos, this->minVal, this->maxVal, 2*this->col1, 2*(this->col2)+1);
 
-  this->lcd->setCursor(12, 0);
-  this->lcd->print(col);
+  //this->lcd->setCursor(12, 0);
+  //this->lcd->print(col);
 
   byte isHalf = col & 0x01;
   col = col >> 1;
