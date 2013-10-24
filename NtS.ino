@@ -53,15 +53,15 @@ struct song_info_struct {
   long length; //song length in miliseconds
   String name; //song name to be displayed
 } song[16] = {
-   {100000, "Trance" }, //0
-   {100000, "Trance" }, //1
-   {100000, "Trance" }, //2
-   {100000, "Trance" }, //3
-   {100000, "Trance" }, //4
-   {100000, "Trance" }, //5
-   {100000, "Trance" }, //6
-   {100000, "Trance" }, //7
-   {20000, "Trance" }, //8
+   {10000, "-reserved-" }, //0
+   {75000, "Blues" }, //1
+   {42000, "Soul-Funk" }, //2
+   {60000, "Hip-Hop" }, //3
+   {60000, "Classical" }, //4
+   {52000, "Jazz" }, //5
+   {44000, "Country" }, //6
+   {46000, "Spiritual/Gospel" }, //7
+   {23000, "Rock&Roll" }, //8
    {100000, "Trance" }, //9
    {100000, "Trance" }, //10
    {100000, "Trance" }, //11
@@ -98,7 +98,7 @@ void onPadPushTimer() {
 void onPadRelease() {
 //  ptimer.reset();
   bl.fadeOff();
-  ptimer.setTimeout(2000, onPadReleaseTimer); //wait a second before doing anything in case somebody is just jumping on the pad
+  ptimer.setTimeout(1000, onPadReleaseTimer); //wait a second before doing anything in case somebody is just jumping on the pad
 }
 
 void onPadReleaseTimer() {
